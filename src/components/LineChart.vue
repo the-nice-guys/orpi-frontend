@@ -12,7 +12,7 @@ import {
   LineElement,
   PointElement,
   CategoryScale,
-  LinearScale,
+  LinearScale, ChartData,
 } from 'chart.js';
 import { Line } from 'vue-chartjs';
 
@@ -27,10 +27,7 @@ ChartJS.register(
 );
 
 interface Props {
-  data: {
-    labels: Array<string>,
-    datasets: Array<unknown>
-  },
+  data: ChartData<'line'>,
   options: {
     responsive: boolean,
     maintainAspectRatio: boolean
