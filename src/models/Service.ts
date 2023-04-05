@@ -1,8 +1,12 @@
+import {Option} from "@/models/Option";
+
 export class Service {
-    id: number | undefined = 0
-    name: string | undefined = ''
-    description: string | undefined = ''
-    host: string | undefined = undefined
+    id: number = 0
+    name: string = ''
+    description: string = ''
+    host: string | undefined
+    options: Array<Option> = []
+    dependencies: Array<string> = []
 
     constructor() {
         this.id = 0;

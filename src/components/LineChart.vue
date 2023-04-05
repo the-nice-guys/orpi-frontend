@@ -13,8 +13,10 @@ import {
   PointElement,
   CategoryScale,
   LinearScale, ChartData,
+
 } from 'chart.js';
 import { Line } from 'vue-chartjs';
+import zoomPlugin from 'chartjs-plugin-zoom'
 
 ChartJS.register(
     Title,
@@ -23,7 +25,8 @@ ChartJS.register(
     LineElement,
     PointElement,
     CategoryScale,
-    LinearScale
+    LinearScale,
+    zoomPlugin,
 );
 
 interface Props {
@@ -31,6 +34,19 @@ interface Props {
   options: {
     responsive: boolean,
     maintainAspectRatio: boolean
+    plugins: {
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: boolean,
+          },
+          pinch: {
+            enabled: boolean
+          },
+          mode: string,
+        }
+      }
+    }
   }
 }
 

@@ -20,7 +20,7 @@ export default createStore({
         environments: state => state.environments.map((env: any) => {
             return {
                 title: env.name,
-                value: env.infrastructure_id
+                value: env
             }
         }),
         environment: (state) => (id: number) => state.environments.find((env: any) => env.infrastructure_id === id),

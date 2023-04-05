@@ -17,7 +17,7 @@
         <span class="material-icons">grid_view</span>
         <span class="text">Overview</span>
       </router-link>
-      <router-link to="/dashboard" class="button">
+      <router-link to="/monitor" class="button">
         <span class="material-icons">space_dashboard</span>
         <span class="text">Dashboard</span>
       </router-link>

@@ -48,16 +48,16 @@
               v-model="environment"
           ></EnvironmentStep>
 
-<!--          <ConfigureServersStep-->
-<!--              v-if="currentTabIndex === 1"-->
-<!--              v-model="hosts"-->
-<!--          />-->
+          <HostStep
+              v-if="currentTabIndex === 1"
+              v-model="hosts"
+          />
 
-<!--          <ConfigureServicesStep-->
-<!--              v-if="currentTabIndex === 2"-->
-<!--              v-model="servicesX"-->
-<!--              :hosts="hosts"-->
-<!--          />-->
+          <ServiceStep
+              v-if="currentTabIndex === 2"
+              v-model="services"
+              :hosts="hosts"
+          />
 
         </Wizard>
       </v-card-text>
@@ -75,7 +75,8 @@ import {ref} from "vue";
 import {computed} from "vue";
 import {Host} from "@/models/Host.js";
 import {Service} from "@/models/Service.js";
-import * as inspector from "inspector";
+import HostStep from "@/components/overview/environmentWizard/HostStep.vue";
+import ServiceStep from "@/components/overview/environmentWizard/ServiceStep.vue";
 
 let dialog = ref(false)
 let tabs = [
@@ -140,15 +141,18 @@ const closeDialog = () => {
 }
 
 const onChangeTab = (index: any) => {
-  if (index.value !== undefined) {
-    currentTabIndex.value = index.value;
-    return;
+  if (Number.isInteger(index)) {
+    currentTabIndex.value = index;
+  } else {
+    currentTabIndex.value = 0
   }
-  currentTabIndex.value = index
 }
 
 const wizardCompleted = () => {
   console.log('Wizard Completed');
+
+
+
   buildInfrastructureModel();
   closeDialog();
 }
@@ -156,7 +160,7 @@ const wizardCompleted = () => {
 const buildInfrastructureModel = () => {
   environment.value.hosts = hosts.value;
   environment.value.hosts.forEach(x => {
-    x.services = services.value.filter(service => service.host === x.name).map(service => structuredClone(service))
+    x.services = services.value.filter(service => service.host === x.name).map(service => JSON.parse(JSON.stringify(service)))
   });
   console.log(environment.value);
 }
