@@ -108,12 +108,20 @@ interface Props {
 let props = defineProps<Props>();
 
 let placeholderService: Service = {
+  ip: '',
   name: 'service name',
   description: 'service desc',
   host: '',
   dependencies: [],
   options: [],
   id: undefined
+}
+
+let placeholderNameOptions: Option = {
+  id: undefined,
+  name: 'name',
+  type: 'string',
+  value: 'name'
 }
 
 let placeholderImageOptions: Option = {
@@ -134,7 +142,7 @@ let services = ref(props.modelValue)
 
 const addService = () => {
   let service = {...placeholderService}
-  service.options = [{...placeholderImageOptions}, {...placeholderPortsOptions}]
+  service.options = [{...placeholderImageOptions}, {...placeholderPortsOptions}, {...placeholderNameOptions}]
   service.name = dockerNames.getRandomName()
   services.value.push(service)
   updateModelValue()

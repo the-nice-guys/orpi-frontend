@@ -2,7 +2,7 @@
   <aside :class="`${is_expanded ? 'is-expanded' : ''}`">
     <div class="logo">
       <img :src="logoURL" alt="Orpi" v-if="!is_expanded"/>
-      <img :src="logoFullURL" alt="Orpi" v-if="is_expanded" style="width: 6.3rem"/>
+      <img :src="logoFullURL" alt="Orpi" v-if="is_expanded" style="width: 6.4rem"/>
     </div>
 
     <div class="menu-toggle-wrap">
@@ -14,12 +14,12 @@
     <h3>Menu</h3>
     <div class="menu">
       <router-link to="/overview" class="button">
-        <span class="material-icons">grid_view</span>
-        <span class="text">Overview</span>
-      </router-link>
-      <router-link to="/monitor" class="button">
         <span class="material-icons">space_dashboard</span>
         <span class="text">Dashboard</span>
+      </router-link>
+      <router-link to="/monitor" class="button">
+        <span class="material-icons">timeline</span>
+        <span class="text">Monitoring</span>
       </router-link>
       <router-link to="/account" class="button">
         <span class="material-icons">account_circle</span>

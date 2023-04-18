@@ -13,6 +13,7 @@ export default createStore({
         access_token: '',
         refresh_token: '',
         environments: [],
+        loaded: false
     },
     getters: {
         loggedIn: state => state.loggedIn,
@@ -37,6 +38,7 @@ export default createStore({
         },
         setEnvironments(state, data) {
             state.environments = data;
+            state.loaded = true;
         },
         setToken(state, data) {
             state.refresh_token = data.refreshToken
@@ -52,7 +54,7 @@ export default createStore({
         },
         async login({ commit }, { email, password }) {
 
-            let axiosResponse = await axios.post('https://localhost:7293/account/auth', {
+            let axiosResponse = await axios.post('http://localhost:5050/account/auth', {
                 "Login": email,
                 "Password": password
             })
@@ -65,7 +67,7 @@ export default createStore({
         },
         async refresh({ commit }) {
             try {
-                let axiosResponse = await axios.get('https://localhost:7293/account/refresh')
+                let axiosResponse = await axios.get('http://localhost:5050/account/refresh')
 
                 if (axiosResponse.status === 200) {
                     await commit('loggedIn', axiosResponse.data);
@@ -76,9 +78,90 @@ export default createStore({
         },
         async getUserEnvironments({ commit }) {
             try {
-                let axiosResponse = await axios.get(`https://localhost:7030/Infrastructure/get_infrastructures_for_user?id=${this.state.user.id}`);
+                let axiosResponse = await axios.get(`http://localhost:5175/Infrastructure/get_infrastructures_for_user?id=${this.state.user.id}`);
                 commit('setEnvironments', axiosResponse.data);
                 return axiosResponse.data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async createEnvironment({commit}, data) {
+            try {
+                let axiosResponse = await axios.post(
+                    `http://localhost:5175/Infrastructure/create_infrastructure`,
+                    {
+                        userId: this.state.user.id,
+                        Infrastructure: data
+                    });
+                this.dispatch('getUserEnvironments');
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async deployEnvironment({commit}, data) {
+            try {
+                data.Infrastructure.hosts.forEach((host: any) => {
+                    host.services.forEach((service: any) => {
+                        service.ip = host.ip + ':5732'
+                    })
+                })
+                console.log(data)
+                let axiosResponse = await axios.post(
+                    'http://localhost:5287/Coordinator/deploy-infrastructure',
+                    {
+                        infrastructure: data.Infrastructure
+                    }
+                )
+                if (axiosResponse.data == false) {
+                    console.log('something wrong')
+                }
+                return axiosResponse.data
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async startEnvironment({commit}, data) {
+            try {
+                data.Infrastructure.hosts.forEach((host: any) => {
+                    host.services.forEach((service: any) => {
+                        service.ip = host.ip + ':5732'
+                    })
+                })
+                console.log(data)
+                let axiosResponse = await axios.post(
+                    'http://localhost:5287/Coordinator/start-infrastructure',
+                    {
+                        infrastructure: data.Infrastructure
+                    }
+                )
+                console.log(axiosResponse.data)
+                if (axiosResponse.data == false) {
+                    console.log('something wrong')
+                }
+                return axiosResponse.data
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async stopEnvironment({commit}, data) {
+            try {
+                data.Infrastructure.hosts.forEach((host: any) => {
+                    host.services.forEach((service: any) => {
+                        service.ip = host.ip + ':5732'
+                    })
+                })
+                console.log(data)
+                let axiosResponse = await axios.post(
+                    'http://localhost:5287/Coordinator/stop-infrastructure',
+                    {
+                        infrastructure: data.Infrastructure
+                    }
+                )
+                console.log(axiosResponse.data)
+                if (axiosResponse.data == false) {
+                    console.log('something wrong')
+                }
+                return axiosResponse.data
             } catch (error) {
                 console.error(error);
             }

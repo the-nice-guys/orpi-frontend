@@ -69,14 +69,15 @@
 // @ts-ignore
 import Wizard from 'form-wizard-vue3'
 import 'form-wizard-vue3/dist/form-wizard-vue3.css'
-import EnvironmentStep from "@/components/overview/environmentWizard/EnvironmentStep.vue";
-import {Environment} from "@/models/Environment.js";
+import EnvironmentStep from "@/components/overview/environmentWizard/InfrastructureStep.vue";
+import {Infrastructure} from "@/models/Infrastructure.js";
 import {ref} from "vue";
 import {computed} from "vue";
 import {Host} from "@/models/Host.js";
 import {Service} from "@/models/Service.js";
 import HostStep from "@/components/overview/environmentWizard/HostStep.vue";
 import ServiceStep from "@/components/overview/environmentWizard/ServiceStep.vue";
+import store from "@/store";
 
 let dialog = ref(false)
 let tabs = [
@@ -95,7 +96,7 @@ let tabs = [
 ]
 let currentTabIndex = ref<Number>(0);
 
-let environment = ref<Environment>({
+let environment = ref<Infrastructure>({
   id: 0,
   name: '',
   description: '',
@@ -148,12 +149,11 @@ const onChangeTab = (index: any) => {
   }
 }
 
-const wizardCompleted = () => {
+const wizardCompleted = async () => {
   console.log('Wizard Completed');
 
-
-
-  buildInfrastructureModel();
+  let model = buildInfrastructureModel();
+  await store.dispatch('createEnvironment', model)
   closeDialog();
 }
 
@@ -162,11 +162,11 @@ const buildInfrastructureModel = () => {
   environment.value.hosts.forEach(x => {
     x.services = services.value.filter(service => service.host === x.name).map(service => JSON.parse(JSON.stringify(service)))
   });
-  console.log(environment.value);
+  return environment.value
 }
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>

@@ -1,6 +1,6 @@
 import {Host} from "./Host";
 
-export class Environment {
+export class Infrastructure {
     id: number | undefined = 0
     name: string | undefined = ''
     description: string | undefined = ''

@@ -6,7 +6,7 @@
       height="100%">
     <v-card-title>Hosts of <span style="color: #5777FA">{{props.selectedEnvironment ? props.selectedEnvironment.name : ''}}</span> </v-card-title>
 
-    <div class="text-center ma-4" v-if="store.state.environments.length === 0">
+    <div class="text-center ma-4" v-if="!store.state.loaded">
       <v-progress-circular color="#5777FA" indeterminate :size="94"></v-progress-circular>
     </div>
 
@@ -33,14 +33,14 @@
 
 <script lang="ts" setup>
 import {useStore} from "vuex";
-import {Environment} from "@/models/Environment";
+import {Infrastructure} from "@/models/Infrastructure";
 import {Host} from "@/models/Host";
 
 let store = useStore()
 const emit = defineEmits(['select-host'])
 
 interface Props {
-  selectedEnvironment: Environment
+  selectedEnvironment: Infrastructure
 }
 
 let props = defineProps<Props>();

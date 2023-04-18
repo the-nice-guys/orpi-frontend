@@ -5,9 +5,9 @@
       height="100%"
       style="border-radius: 24px"
   >
-    <v-card-title>Environments</v-card-title>
+    <v-card-title>Infrastructures</v-card-title>
 
-    <div class="text-center ma-4" v-if="props.environments.length === 0">
+    <div class="text-center ma-4" v-if="!store.state.loaded">
       <v-progress-circular color="#5777FA" indeterminate :size="94"></v-progress-circular>
     </div>
 
@@ -42,21 +42,21 @@
 </template>
 
 <script lang="ts" setup>
-import {Environment} from "@/models/Environment";
+import {Infrastructure} from "@/models/Infrastructure";
 import {useStore} from "vuex";
 import {defineEmits} from "vue";
 import CreateEnvironmentDialog from "@/components/overview/environmentWizard/CreateEnvironmentDialog.vue";
 const emit = defineEmits(['select-environment'])
 
 interface Props {
-  environments: Environment[],
-  selectedEnvironment: Environment
+  environments: Infrastructure[],
+  selectedEnvironment: Infrastructure
 }
 
 let props = defineProps<Props>();
 let store = useStore();
 
-const selectEnvironment = (item: Environment) => {
+const selectEnvironment = (item: Infrastructure) => {
   emit('select-environment', item)
 }
 

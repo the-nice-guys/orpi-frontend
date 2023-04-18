@@ -43,13 +43,13 @@
 <script lang="ts" setup>
 // @ts-ignore
 import dockerNames from 'docker-names'
-import {Environment} from "@/models/Environment";
+import {Infrastructure} from "@/models/Infrastructure";
 import {onMounted, onUnmounted, ref, Ref, toRef} from "vue";
 
 const emit = defineEmits(['update:modelValue'])
 
 interface Props {
-  modelValue: Environment
+  modelValue: Infrastructure
 }
 
 let props = defineProps<Props>();
@@ -63,7 +63,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  environment.value = new Environment()
+  environment.value = new Infrastructure()
 })
 
 const updateModelValue = () => {
