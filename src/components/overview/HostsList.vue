@@ -24,6 +24,12 @@
         <template v-slot:prepend>
           <v-icon :icon="item.icon" v-bind:class="item.status === 0 ? 'online' : 'offline'"></v-icon>
         </template>
+        <template v-slot:append="{ isActive }">
+          <EditHostDialog v-if="isActive"
+                          :modelValue="item"
+                          @update:modelValue="newValue => editHost(item, newValue)"
+          />
+        </template>
         <v-list-item-title>{{ item.name }}</v-list-item-title>
         <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
       </v-list-item>
@@ -35,6 +41,7 @@
 import {useStore} from "vuex";
 import {Infrastructure} from "@/models/Infrastructure";
 import {Host} from "@/models/Host";
+import EditHostDialog from "@/components/overview/dialogs/EditHostDialog.vue";
 
 let store = useStore()
 const emit = defineEmits(['select-host'])
@@ -49,6 +56,13 @@ console.log(props.selectedEnvironment)
 
 const selectHost = (item: Host) => {
   emit('select-host', item)
+}
+
+const editHost = (currentValue: Host, newValue: Host) => {
+  currentValue.name = newValue.name
+  currentValue.icon = newValue.icon
+  currentValue.ip = newValue.ip
+  currentValue.description = newValue.description
 }
 
 </script>

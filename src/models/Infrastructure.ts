@@ -1,7 +1,7 @@
 import {Host} from "./Host";
 
 export class Infrastructure {
-    id: number | undefined = 0
+    infrastructure_id: number | undefined = 0
     name: string | undefined = ''
     description: string | undefined = ''
     icon: string | undefined = ''

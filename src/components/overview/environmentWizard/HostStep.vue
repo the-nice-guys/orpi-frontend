@@ -73,7 +73,7 @@ let placeholderHost: Host = {
   ip: '',
   icon: 'mdi-server',
   status: undefined,
-  id: undefined,
+  host_id: undefined,
   services: []
 }
 

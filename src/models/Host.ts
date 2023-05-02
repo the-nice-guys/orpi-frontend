@@ -1,7 +1,7 @@
 import {Service} from "./Service";
 
 export class Host {
-    id: number | undefined = 0
+    host_id: number | undefined = 0
     name: string | undefined = ''
     description: string | undefined = ''
     icon: string | undefined = ''

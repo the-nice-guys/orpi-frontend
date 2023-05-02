@@ -21,10 +21,14 @@
           :value="item.name"
           @click="selectEnvironment(item)"
           active-color="#5777FAFF"
-
       >
         <template v-slot:prepend>
           <v-icon :icon="item.icon"></v-icon>
+        </template>
+        <template v-slot:append="{ isActive }">
+          <EditInfrastructureDialog v-if="isActive"
+                                    :modelValue="item"
+                                    @update:modelValue="newValue => editInfra(item, newValue)"/>
         </template>
         <v-list-item-title>{{ item.name }}</v-list-item-title>
         <v-list-item-subtitle>{{ item.description }}</v-list-item-subtitle>
@@ -46,6 +50,8 @@ import {Infrastructure} from "@/models/Infrastructure";
 import {useStore} from "vuex";
 import {defineEmits} from "vue";
 import CreateEnvironmentDialog from "@/components/overview/environmentWizard/CreateEnvironmentDialog.vue";
+import EditInfrastructureDialog from "@/components/overview/dialogs/EditInfrastructureDialog.vue"
+import {Host} from "@/models/Host";
 const emit = defineEmits(['select-environment'])
 
 interface Props {
@@ -60,6 +66,11 @@ const selectEnvironment = (item: Infrastructure) => {
   emit('select-environment', item)
 }
 
+const editInfra = (currentValue: Infrastructure, newValue: Infrastructure) => {
+  currentValue.name = newValue.name
+  currentValue.icon = newValue.icon
+  currentValue.description = newValue.description
+}
 </script>
 
 <style scoped>

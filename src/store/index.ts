@@ -42,6 +42,34 @@ export default createStore({
         },
         setToken(state, data) {
             state.refresh_token = data.refreshToken
+        },
+        editHost(state, data) {
+            state.environments.forEach(env => {
+                // @ts-ignore
+                env.hosts.forEach(host => {
+                    if (host.host_id === data.host_id) {
+                        host.name = data.name
+                        host.description = data.description
+                        host.icon = data.icon
+                        host.ip = data.ip
+                        return
+                    }
+                })
+            })
+        },
+        editInfra(state, data) {
+            state.environments.forEach(env => {
+                // @ts-ignore
+                if (env.infrastructure_id === data.infrastructure_id) {
+                    // @ts-ignore
+                    env.name = data.name
+                    // @ts-ignore
+                    env.description = data.description
+                    // @ts-ignore
+                    env.icon = data.icon
+                    return
+                }
+            })
         }
     },
     actions: {
@@ -81,6 +109,28 @@ export default createStore({
                 let axiosResponse = await axios.get(`http://localhost:5175/Infrastructure/get_infrastructures_for_user?id=${this.state.user.id}`);
                 commit('setEnvironments', axiosResponse.data);
                 return axiosResponse.data;
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async editHost({commit} , data) {
+            console.log(data)
+            try {
+                let axiosResponse = await axios.put(
+                    `http://localhost:5175/Host/update_host`,
+                    data);
+                commit('editHost', data);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async editInfra({commit} , data) {
+            console.log(data)
+            try {
+                let axiosResponse = await axios.put(
+                    `http://localhost:5175/Infrastructure/update_infrastructure`,
+                    data);
+                commit('editInfra', data);
             } catch (error) {
                 console.error(error);
             }
