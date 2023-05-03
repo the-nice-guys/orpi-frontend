@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import axios from "axios";
+import historyModule from "@/store/historyModule";
 
 export default createStore({
     state: {
@@ -218,5 +219,6 @@ export default createStore({
         }
     },
     modules: {
+        history: historyModule
     }
 })

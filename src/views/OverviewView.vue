@@ -199,7 +199,7 @@
         </v-col>
 
         <v-col cols="8">
-          <EnvironmentHistory/>
+          <InfrastructureHistory :infrastructure="selectedEnvironment"/>
         </v-col>
       </v-row>
     </v-container>
@@ -208,7 +208,7 @@
 
 <script lang="ts" setup>
 import EnvironmentsList from '@/components/overview/InfrastructuresList.vue'
-import EnvironmentHistory from '@/components/InfrastructureHistory.vue'
+import InfrastructureHistory from '@/components/InfrastructureHistory.vue'
 import HostsList from '@/components/overview/HostsList.vue'
 import AccountCloud from '@/components/AccountCloud.vue'
 import {useStore} from 'vuex';
@@ -240,6 +240,11 @@ onMounted(async () => {
   // @ts-ignore
   selectedHost.value = selectedEnvironment.value.hosts[0];
   selectedService.value = selectedHost.value?.services[0];
+
+  store.dispatch('getHistory', {
+    infraId: selectedEnvironment.value?.infrastructure_id,
+    take: 3
+  })
 });
 
 let scripts: Array<any> = [
@@ -348,6 +353,12 @@ const selectEnvironment = (environment: Infrastructure) => {
   selectedEnvironment.value = environment;
   selectedHost.value = environment.hosts[0]
   selectedService.value = environment.hosts[0].services[0]
+  let payload = {
+    infraId: selectedEnvironment.value?.infrastructure_id,
+    take: 3
+  }
+  console.log(payload)
+  store.dispatch('getHistory', payload)
 }
 
 const selectHost = (item: Host) => {

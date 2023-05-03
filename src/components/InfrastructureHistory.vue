@@ -16,45 +16,62 @@
         direction="horizontal"
       >
         <v-timeline-item
-            dot-color="#5777FA">
-          <template v-slot:opposite>
-            23.10.2022 v1.2.0
-          </template>
-          <div>
-            <div class="text-h6">Service added</div>
-            <p>
-              Service 15 was added on the Host 1
-            </p>
-          </div>
-        </v-timeline-item>
-
-        <v-timeline-item
-            dot-color="#1D2336"
+          v-for="(item, i) in store.getters.history"
+          :key="i"
+          :dot-color="i === 0 ? '#5777FA' : '#1D2336'"
         >
           <template v-slot:opposite>
-            22.10.2022
+            {{ parseDate(item.timestamp) }}
           </template>
-          <div>
-            <div class="text-h6">Snapshot taken</div>
-            <p>
-              Backup of the environment was taken
-            </p>
-          </div>
-        </v-timeline-item>
 
-        <v-timeline-item
-            dot-color="#1D2336"
-        >
-          <template v-slot:opposite>
-            22.10.2022
-          </template>
           <div>
-            <div class="text-h6">Content title</div>
+            <div class="text-h6">{{ item.title }}</div>
             <p>
-              Lorem ipsum dolor sit amet.
+              {{ item.message}}
             </p>
           </div>
+
         </v-timeline-item>
+<!--        <v-timeline-item-->
+<!--            dot-color="#5777FA">-->
+<!--          <template v-slot:opposite>-->
+<!--            23.10.2022 v1.2.0-->
+<!--          </template>-->
+<!--          <div>-->
+<!--            <div class="text-h6">Service added</div>-->
+<!--            <p>-->
+<!--              Service 15 was added on the Host 1-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </v-timeline-item>-->
+
+<!--        <v-timeline-item-->
+<!--            dot-color="#1D2336"-->
+<!--        >-->
+<!--          <template v-slot:opposite>-->
+<!--            22.10.2022-->
+<!--          </template>-->
+<!--          <div>-->
+<!--            <div class="text-h6">Snapshot taken</div>-->
+<!--            <p>-->
+<!--              Backup of the environment was taken-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </v-timeline-item>-->
+
+<!--        <v-timeline-item-->
+<!--            dot-color="#1D2336"-->
+<!--        >-->
+<!--          <template v-slot:opposite>-->
+<!--            22.10.2022-->
+<!--          </template>-->
+<!--          <div>-->
+<!--            <div class="text-h6">Content title</div>-->
+<!--            <p>-->
+<!--              Lorem ipsum dolor sit amet.-->
+<!--            </p>-->
+<!--          </div>-->
+<!--        </v-timeline-item>-->
       </v-timeline>
     </v-card-text>
 
@@ -66,13 +83,44 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts" setup>
 import {useStore} from "vuex";
-export default {
-  name: "EnvHistory",
-  data: () => ({
-    store: useStore()
-  }),
+import {Infrastructure} from "@/models/Infrastructure.js";
+import {onMounted} from "vue";
+
+let store = useStore();
+
+interface Props {
+  infrastructure: Infrastructure
+}
+
+const props = defineProps<Props>()
+
+let hist = [
+  {
+    "id": 1,
+    "timestamp": "2023-05-02T17:36:05.384045",
+    "message": "string"
+  },
+  {
+    "id": 2,
+    "timestamp": "2023-05-03T15:00:38.483117",
+    "message": "new history message"
+  },
+  {
+    "id": 3,
+    "timestamp": "2023-05-03T15:04:28.309572",
+    "message": "new history message"
+  }
+]
+
+onMounted(() => {
+
+})
+
+const parseDate = (date: string) => {
+  let str = date.replace('T', ' ').slice(0, date.length-7)
+  return str
 }
 </script>
 
